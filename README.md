@@ -1,6 +1,6 @@
 # Hong Kong FPS Trends Dashboard
 
-**香港「轉數快」使用趨勢分析：從兩組金管局官方 API 建立可追溯、可更新、可互動嘅港元支付分析作品。**
+**An interactive dashboard exploring Hong Kong dollar payment trends in the Faster Payment System (FPS), built from two official HKMA APIs with a reproducible data pipeline.**
 
 Python · pandas · Streamlit · Plotly | HKD only | 96 months | 19 automated tests
 
@@ -8,44 +8,46 @@ Python · pandas · Streamlit · Plotly | HKD only | 96 months | 19 automated te
 
 [GitHub repository](https://github.com/CardiFfung/hong-kong-fps-dashboard)
 
-![實際運行截圖：最新月份概覽及支付趨勢](docs/dashboard.png)
+![Dashboard screenshot showing the latest monthly metrics and payment trends](docs/dashboard.png)
 
-> 本地成品已實際執行及驗證。公開 demo 尚待帳戶部署；不使用虛構 demo 網址。數據快照擷取於 2026-09-17T00:59:25.629892+08:00。
+> The dashboard interface and charts are in Traditional Chinese. The local application has been tested; a public interactive demo has not yet been deployed. The findings below use the official data snapshot retrieved on 17 September 2026 at 00:59 HKT.
 
-## 專案重點
+## Project Highlights
 
-- **官方數據整合**：透過 HKMA API 分頁擷取資料，按月份合併筆數與金額，並進行清理及品質檢查。
-- **互動趨勢分析**：以清楚定義嘅指標及圖表，呈現支付規模、交易組成與平均每筆金額，支援篩選及 CSV 下載。
-- **可追溯嘅資料流程**：保留原始快照、來源及更新時間，並喺 API 異常時清楚標示資料狀態。
+- **Official data integration:** Retrieves paginated HKMA data, merges transaction volume and value by month, and performs cleaning and quality checks.
+- **Interactive trend analysis:** Presents payment scale, transaction composition, and average transaction value through clearly defined metrics, filters, charts, and CSV exports.
+- **Traceable data processing:** Preserves raw snapshots, source URLs, and retrieval timestamps, with explicit data-status messages when an API update fails.
 
-## 研究問題
+## Research Questions
 
-1. 每月港元 FPS 筆數同金額自推出以來點變？
-2. 最新完整月相比上月／上年同月，絕對及百分比變化係幾多？
-3. 即時及批量支付各佔總筆數／總金額幾多？
-4. 個人代碼／帳戶號碼轉帳佔所有即時轉帳 `rtctp` 幾多？
-5. 同月同類別平均每筆金額點變？
+1. How have monthly HKD FPS transaction volume and value changed since launch?
+2. How does the latest complete month compare with the previous month and the same month a year earlier, in both absolute and percentage terms?
+3. What shares of total transaction volume and value come from real-time and batch payments?
+4. What shares of total real-time credit transfers (`rtctp`) come from payments initiated by personal accounts using payee proxy IDs or account numbers?
+5. How has average transaction value changed within each payment category?
 
-## 三個主要發現
+## Key Findings
 
-以下由 2026-09-17 快照計算，最新月份為 2026-08；更新後 Dashboard 會重新計算，README 呢段係有日期嘅固定紀錄。
+These findings were calculated from the 17 September 2026 snapshot, with August 2026 as the latest available month. The dashboard recalculates its findings after a data update; this README records a dated analysis.
 
-1. 2026-08 總筆數為 82,587,554 筆，按月 -2.03%，按年 +14.93%。
-2. 同月總金額為 8,062.70 億港元，按年 +9.09%；平均每筆 9,762.61 港元。
-3. 即時支付佔總筆數 88.13%，佔總金額 69.21%；筆數與金額組成並不相同。
+1. **August 2026 recorded 82,587,554 transactions**, down **2.03% month over month** and up **14.93% year over year**.
+2. **Total transaction value was HK$806.27 billion**, up **9.09% year over year**, with an **average of HK$9,762.61 per transaction**.
+3. **Real-time payments accounted for 88.13% of transaction volume but 69.21% of transaction value**, showing that the two measures describe different aspects of the payment mix.
 
-以上係描述性結論，唔解釋原因。由首個完整月 2018-10 至最新月，總筆數由 1,682,647 增至 82,587,554，總金額由約 359.81 億增至 8,062.70 億港元；圖表保留中間波動，唔假設持續每月上升。
+These are descriptive findings, not explanations of causality. Between October 2018, the first full month after launch, and August 2026, monthly volume increased from 1,682,647 to 82,587,554 transactions, while value increased from approximately HK$35.98 billion to HK$806.27 billion. The charts retain the intervening fluctuations rather than implying uninterrupted monthly growth.
 
-## 安裝及啟動
+## Installation and Usage
 
-建議 **Python 3.13**（本機已使用 3.13.14 驗證）。先將 Terminal 切換到呢個 `fps-dashboard` 資料夾。
+Use **Python 3.13**; the local application was tested with Python 3.13.14. Run the commands below from the project directory.
 
-下載新副本：
+To download a new copy:
 
 ```bash
 git clone https://github.com/CardiFfung/hong-kong-fps-dashboard.git
 cd hong-kong-fps-dashboard
 ```
+
+Create a virtual environment, install dependencies, and start the dashboard on macOS or Linux:
 
 ```bash
 python3 -m venv .venv
@@ -54,52 +56,63 @@ python -m pip install -r requirements.txt
 python -m streamlit run app.py
 ```
 
-瀏覽器打開 `http://localhost:8501`。本機交付已安裝好 `.venv`，可以直接 `source .venv/bin/activate` 後啟動，或在 Finder 雙擊 `Start Dashboard.command`。
-Windows 啟用方式改為 `.venv\Scripts\activate`，建立環境用 `py -3.13 -m venv .venv`。
+Open `http://localhost:8501` in your browser. If the local virtual environment is already configured, activate it and run the final command. On macOS, you can also double-click `Start Dashboard.command` after completing the environment setup.
 
-隨附真實官方快照，啟動唔需要即時連線。第一次重新下載或更新：
+On Windows, create the environment with `py -3.13 -m venv .venv`. Activate it using `.venv\Scripts\activate.bat` in Command Prompt or `.venv\Scripts\Activate.ps1` in PowerShell, then run the same installation and startup commands.
+
+The repository includes genuine official data snapshots, so startup does not require a live API connection. To retrieve fresh data:
 
 ```bash
 python -m src.pipeline
 ```
 
-亦可按側欄「從 HKMA 更新資料」。每次取兩個來源全部月份，保留新版本，只有成功驗證後先切換快照；冇設定自動排程。API 失敗會顯示錯誤同舊資料日期；冇快照就停止顯示指標。
+Alternatively, use the HKMA data-update button in the dashboard sidebar. Each update retrieves all available months from both sources, retains a new snapshot, and makes it active only after validation succeeds. Updates are manual; no automatic schedule is configured. If an API update fails, the dashboard displays an error and the previous snapshot's retrieval date. Without a valid snapshot, it stops rather than displaying fabricated metrics.
 
-## 數據來源及定義
+## Data Sources and Definitions
 
-- [HKMA 港元 FPS 筆數 API](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-vol)：交易筆數。
-- [HKMA 港元 FPS 金額 API](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-val)：**千港元，乘 1,000 先係港元**。
-- [欄位、時間範圍、分頁及品質核對](docs/DATA_AUDIT.md)：包含官方文件連結及實際回應證據。
+- [HKMA HKD FPS volume API](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-vol): Number of transactions.
+- [HKMA HKD FPS value API](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-val): **Values are reported in HKD thousands and must be multiplied by 1,000 to obtain HKD.**
+- [Data audit](docs/DATA_AUDIT.md): Field definitions, coverage, pagination, quality checks, official documentation links, and evidence from the API responses.
 
-金額與筆數用月份一對一合併，以 `_volume`、`_value_hkd_thousand` 分清。平均每筆 = 同類別千港元 × 1,000 ÷ 筆數。MoM／YoY 需要確切上月／上年同月，零分母不計百分比。
-
-總支付 = 即時支付 + 批量支付；即時支付 = 即時轉帳 + 即時扣帳。所有合計同子類別不可重複加埋。個人類別圖嘅主要比例分母係 `rtctp`，包括「其他即時轉帳」。
-
-## 互動及展示
-
-- 月份滑桿影響圖表及 CSV；類別選擇影響趨勢及平均圖。
-- 筆數／金額切換影響模式組成及子類別比較。
-- 最新月份卡及三個發現固定使用全資料最新完整月，避免篩選後誤稱「最新」。
-- 五張圖分清筆數、金額、比例、平均；每張圖附閱讀方法及不可推論事項。
-- CSV 按月份篩選，保留全部類別同兩種指標；原始快照、清理結果、呈現層分開。
-
-## 專案結構
+The two datasets are merged one-to-one by month, with `_volume` and `_value_hkd_thousand` suffixes distinguishing their original fields. Average transaction value is calculated as:
 
 ```text
-app.py                  畫面、篩選、圖表、下載、錯誤提示
-src/pipeline.py         API、分頁、清理、合併、驗證、全部衍生計算
-requirements.txt        固定執行依賴
-requirements-dev.txt    驗證工具
-requirements-lock.txt   本機完整套件版本
- data/current.json      指向上次成功版本
- data/raw/<snapshot>/   原始回應及每頁網址
- data/processed/<snapshot>/  fps.csv、metadata.json
- tests/                 單元、畫面及瀏覽器檢查
- docs/                  截圖、資料核對、測試、部署、履歷及面試筆記
-LEARNING_NOTES.md       新手廣東話／繁體中文學習路線
+Average value in HKD = value in HKD thousands × 1,000 ÷ transaction volume
 ```
 
-## 驗證
+Both inputs must refer to the same month and category. Missing values or zero transaction volume produce no average. Month-over-month (MoM) and year-over-year (YoY) growth require the exact previous month or same month of the previous year; percentage changes are undefined when the baseline is zero.
+
+Total payments comprise real-time payments and batch payments. Real-time payments comprise real-time credit transfers and real-time direct debits. Totals must not be added to their own components. The primary denominator for personal-account transfer shares is `rtctp`, which includes other real-time credit transfers.
+
+The Traditional Chinese dashboard displays volume in units of 10,000 transactions and value in units of HK$100 million. These display units differ from the billions used in this README, but represent the same underlying values.
+
+## Dashboard Features
+
+- A month-range slider filters charts and CSV exports; category selection controls the volume, value, and average-value trend charts.
+- A volume/value selector controls payment-mode shares and transfer-subcategory comparisons.
+- The headline metrics and three generated findings always refer to the latest complete month in the full dataset, independently of chart filters.
+- Five charts distinguish transaction counts, monetary values, shares, and averages, with guidance on interpretation and limitations.
+- CSV exports follow the selected month range and include all categories and both measures. Raw data, processed data, and presentation code are kept separate.
+
+## Project Structure
+
+```text
+app.py                      Interface, filters, charts, downloads, and error states
+src/pipeline.py             API retrieval, pagination, cleaning, merging,
+                            validation, and all derived calculations
+requirements.txt            Pinned runtime dependencies
+requirements-dev.txt        Testing tools
+requirements-lock.txt       Full local dependency versions
+data/current.json           Pointer to the latest successful snapshot
+data/raw/<snapshot>/        Original responses and per-page request URLs
+data/processed/<snapshot>/  fps.csv and metadata.json
+tests/                      Pipeline, application, and browser checks
+docs/                       Screenshots, data audit, QA, deployment,
+                            CV wording, and interview notes
+LEARNING_NOTES.md            Beginner learning guide in Cantonese/Traditional Chinese
+```
+
+## Validation
 
 ```bash
 python -m pip install -r requirements-dev.txt
@@ -107,28 +120,32 @@ python -m pytest -q
 python -m src.pipeline --offline
 ```
 
-19 項測試通過：月份唯一、缺月處理、單位換算、零分母、推出月份排除、分母選擇、合計差異報告、分頁、API 失敗、快照保護及畫面篩選。另用 Decimal 手算核對最新官方數字，真實 Chromium 瀏覽器驗證五張圖、CSV 下載及手機畫面。詳見 [QA 報告](docs/QA_REPORT.md)。GitHub Actions 已於 2026-09-17 喺 Ubuntu / Python 3.13 [通過驗證](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241)。
+All **19 automated tests passed**, covering unique months, missing months, unit conversion, zero denominators, launch-month exclusions, share denominators, reconciliation reporting, pagination, API failures, snapshot preservation, and interface filtering.
 
-## 資料限制
+Independent calculations using `Decimal` were checked against the official snapshot. Browser checks in Chromium verified the five charts, CSV downloads, and the mobile layout. See the [QA report](docs/QA_REPORT.md). GitHub Actions also [passed on Ubuntu with Python 3.13](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241) on 17 September 2026.
 
-- 僅港元；整體月度資料，唔知道個別用戶、獨立人數、用途或人口特徵。
-- 2018-09-30 全面推出，9 月可能只係部分月份；圖上標記，增長率及移動平均排除。
-- 平均每筆唔係中位數，亦唔能代表典型個人交易；大額交易同組成變化會影響平均。
-- 月份長短、節日等可能影響總數；未作季節調整、因果分析或預測。
-- 官方可能修訂，最新已結束月份唔代表永不修訂；快照保存擷取時間、來源及校驗值。
-- 空值不填零。合計差異只報告，唔改官方原數據；最新頁面先檢查兩組總數存在。
-- 雲端執行時嘅更新檔案可能隨重啟消失，需另設持久儲存或更新 repository 快照。
+## Data Limitations
 
-## 我喺 project 學到乜
+- **HKD only:** Aggregate monthly statistics do not identify individual users, unique user counts, transaction purposes, or demographics.
+- **Partial launch month:** FPS was fully launched on 30 September 2018. September 2018 may represent only a partial month; it is marked on charts and excluded from growth comparisons and moving averages.
+- **Averages are not medians:** Large transactions and changes in the payment mix can influence the mean, which does not necessarily describe a typical person's transaction.
+- **No causal claims:** Month length, holidays, and other factors may affect totals. This project does not apply seasonal adjustment, causal modelling, or forecasting.
+- **Revisions are possible:** A completed calendar month is not necessarily final. Snapshots retain retrieval times, source URLs, and checksums.
+- **Missing data remain missing:** Nulls are not replaced with zero. Reconciliation differences are reported without altering official values. Headline metrics require both monthly totals to be available.
+- **Cloud storage is not guaranteed:** Files written during a hosted session may be lost after a restart. Persistent storage or updated repository snapshots would be needed for durable cloud updates.
 
-定義正確分母比圖表花巧更重要；千港元轉港元需要一致單位；月份排序唔等於月份連續；資料錯誤唔可以用零遮掩；可重跑流程同原始快照令指標可以核對。
+## Learning Takeaways
 
-呢個初稿由 AI 協助實作。作為作品集持有人，應按 [LEARNING_NOTES](LEARNING_NOTES.md) 親手重跑、完成練習，並能解釋設計選擇，再按實際參與程度描述。
+Clear denominators and consistent units are essential to meaningful analysis. Sorting months does not guarantee a continuous monthly series, and missing data should not be disguised as zero. A reproducible pipeline and preserved source snapshots make the results easier to verify.
 
-## 求職及部署
+The initial implementation was developed with AI assistance. The [learning notes](LEARNING_NOTES.md) provide exercises for rerunning the pipeline, checking calculations, and understanding the design decisions before describing personal contributions.
 
-- [CV／LinkedIn 三句描述](docs/CV_LINKEDIN.md)
-- [10 分鐘面試講解大綱](docs/INTERVIEW_OUTLINE.md)
-- [公開 demo 部署步驟](docs/DEPLOYMENT.md)
+## Further Documentation
 
-本作品為獨立學習專案，數據來源為 HKMA，並非金管局官方產品。公開轉載數據時請保留來源並查閱官方使用條款。
+The supporting learning and presentation guides remain in Traditional Chinese.
+
+- [CV and LinkedIn descriptions](docs/CV_LINKEDIN.md)
+- [10-minute project presentation outline](docs/INTERVIEW_OUTLINE.md)
+- [Public demo deployment guide](docs/DEPLOYMENT.md)
+
+This is an independent learning project using HKMA data, not an official HKMA product. Retain source attribution and consult the official terms of use when redistributing the data.
