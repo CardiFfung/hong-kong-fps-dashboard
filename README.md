@@ -1,151 +1,108 @@
 # Hong Kong FPS Trends Dashboard
 
-**An interactive dashboard exploring Hong Kong dollar payment trends in the Faster Payment System (FPS), built from two official HKMA APIs with a reproducible data pipeline.**
+Explore monthly HKD payment activity in Hong Kong's Faster Payment System using official Hong Kong Monetary Authority (HKMA) data.
 
-Python · pandas · Streamlit · Plotly | HKD only | 96 months | 19 automated tests
+![Dashboard showing monthly payment trends and the latest metrics](docs/dashboard.png)
 
-[![Validate FPS dashboard](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/workflows/tests.yml)
+## Overview
 
-[GitHub repository](https://github.com/CardiFfung/hong-kong-fps-dashboard)
+The dashboard brings transaction volume, value, payment mix, and average transaction size into one view for reviewing payment activity. It covers September 2018 to August 2026 in the included snapshot.
 
-![Dashboard screenshot showing the latest monthly metrics and payment trends](docs/dashboard.png)
+The interface is in Traditional Chinese for local readers, with amounts displayed in HKD. This README documents the project in English.
 
-> The dashboard interface and charts are in Traditional Chinese. The local application has been tested; a public interactive demo has not yet been deployed. The findings below use the official data snapshot retrieved on 17 September 2026 at 00:59 HKT.
+### Features
 
-## Project Highlights
+- Monthly volume and value trends, with optional 12-month moving averages.
+- Latest complete-month metrics with absolute and percentage changes against the previous month and the same month a year earlier.
+- Real-time versus batch payment shares, plus a breakdown of real-time credit transfers.
+- Category and date filters, average transaction values, and CSV downloads.
+- On-demand API updates with validation, archived source responses, and a dated fallback when an update fails.
 
-- **Official data integration:** Retrieves paginated HKMA data, merges transaction volume and value by month, and performs cleaning and quality checks.
-- **Interactive trend analysis:** Presents payment scale, transaction composition, and average transaction value through clearly defined metrics, filters, charts, and CSV exports.
-- **Traceable data processing:** Preserves raw snapshots, source URLs, and retrieval timestamps, with explicit data-status messages when an API update fails.
+## Analysis Highlights
 
-## Research Questions
+Based on August 2026 data, retrieved on 17 September 2026:
 
-1. How have monthly HKD FPS transaction volume and value changed since launch?
-2. How does the latest complete month compare with the previous month and the same month a year earlier, in both absolute and percentage terms?
-3. What shares of total transaction volume and value come from real-time and batch payments?
-4. What shares of total real-time credit transfers (`rtctp`) come from payments initiated by personal accounts using payee proxy IDs or account numbers?
-5. How has average transaction value changed within each payment category?
+| Observation | Interpretation |
+|---|---|
+| Volume rose **14.93% year over year**, while value rose **9.09%**. Average transaction value fell **5.08%** to **HK$9,762.61**. | Higher payment activity did not translate into an equally large increase in value. Tracking both counts and average transaction size makes this distinction visible. |
+| Batch payments represented **11.87% of transactions** but **30.79% of value**. Their average was **HK$25,330.69**, versus **HK$7,666.29** for real-time payments—about **3.30 times** as much. | A volume-only view understates the contribution of batch payments to total value. Payment-mix comparisons should include both measures. |
+| Total volume fell **2.03% month over month** but remained **14.93% above August 2025**. | The monthly decline and annual growth describe different comparison periods. One weaker month alone does not establish a reversal in the longer-term trend. |
 
-## Key Findings
+These figures describe aggregate payment patterns; the data do not identify the reasons behind them.
 
-These findings were calculated from the 17 September 2026 snapshot, with August 2026 as the latest available month. The dashboard recalculates its findings after a data update; this README records a dated analysis.
+## Tech Stack
 
-1. **August 2026 recorded 82,587,554 transactions**, down **2.03% month over month** and up **14.93% year over year**.
-2. **Total transaction value was HK$806.27 billion**, up **9.09% year over year**, with an **average of HK$9,762.61 per transaction**.
-3. **Real-time payments accounted for 88.13% of transaction volume but 69.21% of transaction value**, showing that the two measures describe different aspects of the payment mix.
+**Python · pandas · Streamlit · Plotly · pytest · GitHub Actions**
 
-These are descriptive findings, not explanations of causality. Between October 2018, the first full month after launch, and August 2026, monthly volume increased from 1,682,647 to 82,587,554 transactions, while value increased from approximately HK$35.98 billion to HK$806.27 billion. The charts retain the intervening fluctuations rather than implying uninterrupted monthly growth.
+Streamlit keeps the data pipeline and interactive interface in one Python project. Plotly provides hover details and chart interactions, while pandas handles monthly alignment and calculations.
 
-## Installation and Usage
+```text
+app.py                      Dashboard interface and charts
+src/pipeline.py             Retrieval, validation, and derived metrics
+data/raw/<snapshot>/        Original API responses and request URLs
+data/processed/<snapshot>/  Processed CSV and snapshot metadata
+data/current.json           Active snapshot pointer
+tests/                      Pipeline, interface, and browser checks
+docs/                       Data definitions, validation, and deployment
+```
 
-Use **Python 3.13**; the local application was tested with Python 3.13.14. Run the commands below from the project directory.
+## Run Locally
 
-To download a new copy:
+Use **Python 3.13**.
 
 ```bash
 git clone https://github.com/CardiFfung/hong-kong-fps-dashboard.git
 cd hong-kong-fps-dashboard
-```
-
-Create a virtual environment, install dependencies, and start the dashboard on macOS or Linux:
-
-```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 python -m streamlit run app.py
 ```
 
-Open `http://localhost:8501` in your browser. If the local virtual environment is already configured, activate it and run the final command. On macOS, you can also double-click `Start Dashboard.command` after completing the environment setup.
+Open `http://localhost:8501`. The included snapshot allows the dashboard to start without an API request.
 
-On Windows, create the environment with `py -3.13 -m venv .venv`. Activate it using `.venv\Scripts\activate.bat` in Command Prompt or `.venv\Scripts\Activate.ps1` in PowerShell, then run the same installation and startup commands.
+On Windows, create the environment with `py -3.13 -m venv .venv` and activate it with `.venv\Scripts\activate.bat` in Command Prompt or `.venv\Scripts\Activate.ps1` in PowerShell.
 
-The repository includes genuine official data snapshots, so startup does not require a live API connection. To retrieve fresh data:
+To refresh the data, use the sidebar update button or run:
 
 ```bash
 python -m src.pipeline
 ```
 
-Alternatively, use the HKMA data-update button in the dashboard sidebar. Each update retrieves all available months from both sources, retains a new snapshot, and makes it active only after validation succeeds. Updates are manual; no automatic schedule is configured. If an API update fails, the dashboard displays an error and the previous snapshot's retrieval date. Without a valid snapshot, it stops rather than displaying fabricated metrics.
+Updates retrieve both datasets and activate a new snapshot after validation. Headline metrics always use the latest complete month; chart filters control the displayed period and CSV export. Updates are manual.
 
-## Data Sources and Definitions
+For hosting configuration, see the [deployment guide](docs/DEPLOYMENT.md).
 
-- [HKMA HKD FPS volume API](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-vol): Number of transactions.
-- [HKMA HKD FPS value API](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-val): **Values are reported in HKD thousands and must be multiplied by 1,000 to obtain HKD.**
-- [Data audit](docs/DATA_AUDIT.md): Field definitions, coverage, pagination, quality checks, official documentation links, and evidence from the API responses.
+## Data Sources and Methodology
 
-The two datasets are merged one-to-one by month, with `_volume` and `_value_hkd_thousand` suffixes distinguishing their original fields. Average transaction value is calculated as:
+- [HKMA HKD FPS transaction volume](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-vol): Number of transactions.
+- [HKMA HKD FPS transaction value](https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-val): Amounts in **HKD thousands**.
 
-```text
-Average value in HKD = value in HKD thousands × 1,000 ÷ transaction volume
-```
-
-Both inputs must refer to the same month and category. Missing values or zero transaction volume produce no average. Month-over-month (MoM) and year-over-year (YoY) growth require the exact previous month or same month of the previous year; percentage changes are undefined when the baseline is zero.
-
-Total payments comprise real-time payments and batch payments. Real-time payments comprise real-time credit transfers and real-time direct debits. Totals must not be added to their own components. The primary denominator for personal-account transfer shares is `rtctp`, which includes other real-time credit transfers.
-
-The Traditional Chinese dashboard displays volume in units of 10,000 transactions and value in units of HK$100 million. These display units differ from the billions used in this README, but represent the same underlying values.
-
-## Dashboard Features
-
-- A month-range slider filters charts and CSV exports; category selection controls the volume, value, and average-value trend charts.
-- A volume/value selector controls payment-mode shares and transfer-subcategory comparisons.
-- The headline metrics and three generated findings always refer to the latest complete month in the full dataset, independently of chart filters.
-- Five charts distinguish transaction counts, monetary values, shares, and averages, with guidance on interpretation and limitations.
-- CSV exports follow the selected month range and include all categories and both measures. Raw data, processed data, and presentation code are kept separate.
-
-## Project Structure
+The pipeline retrieves all pages and merges the datasets one-to-one on `end_of_month`. It checks duplicate and missing months, invalid values, and component-to-total relationships. Raw fields retain `_volume` and `_value_hkd_thousand` suffixes.
 
 ```text
-app.py                      Interface, filters, charts, downloads, and error states
-src/pipeline.py             API retrieval, pagination, cleaning, merging,
-                            validation, and all derived calculations
-requirements.txt            Pinned runtime dependencies
-requirements-dev.txt        Testing tools
-requirements-lock.txt       Full local dependency versions
-data/current.json           Pointer to the latest successful snapshot
-data/raw/<snapshot>/        Original responses and per-page request URLs
-data/processed/<snapshot>/  fps.csv and metadata.json
-tests/                      Pipeline, application, and browser checks
-docs/                       Screenshots, data audit, QA, deployment,
-                            CV wording, and interview notes
-LEARNING_NOTES.md            Beginner learning guide in Cantonese/Traditional Chinese
+Average transaction value (HKD) = value (HKD thousands) × 1,000 ÷ volume
 ```
+
+Calculations use the same month and payment category. Growth rates require the exact comparison month and a positive baseline. Missing values remain blank.
+
+Real-time payments plus batch payments equal total payments. The personal-account transfer breakdown uses **all real-time credit transfers (`rtctp`)** as its denominator, including other credit transfers. Totals and their components are not added together.
+
+The dashboard displays volume in units of 10,000 transactions and value in units of HK$100 million. See the [data audit and field definitions](docs/DATA_AUDIT.md) for source documentation and reconciliation details.
 
 ## Validation
 
 ```bash
 python -m pip install -r requirements-dev.txt
 python -m pytest -q
-python -m src.pipeline --offline
 ```
 
-All **19 automated tests passed**, covering unique months, missing months, unit conversion, zero denominators, launch-month exclusions, share denominators, reconciliation reporting, pagination, API failures, snapshot preservation, and interface filtering.
+Tests cover pagination, monthly alignment, unit conversion, zero denominators, reconciliation, snapshot handling, and dashboard states. Independent calculations and browser checks are documented in the [validation report](docs/QA_REPORT.md). Current automated results are available in [GitHub Actions](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/workflows/tests.yml).
 
-Independent calculations using `Decimal` were checked against the official snapshot. Browser checks in Chromium verified the five charts, CSV downloads, and the mobile layout. See the [QA report](docs/QA_REPORT.md). GitHub Actions also [passed on Ubuntu with Python 3.13](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241) on 17 September 2026.
+## Limitations
 
-## Data Limitations
+- **Aggregate HKD data:** Transaction counts are not user counts, and average values are not medians. The dataset does not reveal individual behaviour, transaction purposes, or causes of changes.
+- **Monthly comparability:** September 2018 is a partial launch month and is excluded from growth comparisons and moving averages. Month length and seasonality may affect subsequent totals; no seasonal adjustment is applied.
+- **Snapshot revisions:** HKMA may revise historical figures. Each snapshot records its retrieval time and sources; update failures retain the previous dated snapshot.
 
-- **HKD only:** Aggregate monthly statistics do not identify individual users, unique user counts, transaction purposes, or demographics.
-- **Partial launch month:** FPS was fully launched on 30 September 2018. September 2018 may represent only a partial month; it is marked on charts and excluded from growth comparisons and moving averages.
-- **Averages are not medians:** Large transactions and changes in the payment mix can influence the mean, which does not necessarily describe a typical person's transaction.
-- **No causal claims:** Month length, holidays, and other factors may affect totals. This project does not apply seasonal adjustment, causal modelling, or forecasting.
-- **Revisions are possible:** A completed calendar month is not necessarily final. Snapshots retain retrieval times, source URLs, and checksums.
-- **Missing data remain missing:** Nulls are not replaced with zero. Reconciliation differences are reported without altering official values. Headline metrics require both monthly totals to be available.
-- **Cloud storage is not guaranteed:** Files written during a hosted session may be lost after a restart. Persistent storage or updated repository snapshots would be needed for durable cloud updates.
-
-## Learning Takeaways
-
-Clear denominators and consistent units are essential to meaningful analysis. Sorting months does not guarantee a continuous monthly series, and missing data should not be disguised as zero. A reproducible pipeline and preserved source snapshots make the results easier to verify.
-
-The initial implementation was developed with AI assistance. The [learning notes](LEARNING_NOTES.md) provide exercises for rerunning the pipeline, checking calculations, and understanding the design decisions before describing personal contributions.
-
-## Further Documentation
-
-The supporting learning and presentation guides remain in Traditional Chinese.
-
-- [CV and LinkedIn descriptions](docs/CV_LINKEDIN.md)
-- [10-minute project presentation outline](docs/INTERVIEW_OUTLINE.md)
-- [Public demo deployment guide](docs/DEPLOYMENT.md)
-
-This is an independent learning project using HKMA data, not an official HKMA product. Retain source attribution and consult the official terms of use when redistributing the data.
+Data source: HKMA. This project is independently maintained and is not an official HKMA product. Developed with AI assistance.

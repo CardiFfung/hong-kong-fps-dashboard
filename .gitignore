@@ -5,3 +5,6 @@ __pycache__/
 *.log
 data/current.tmp
 data/current-*.tmp
+
+# Local convenience launcher
+/Start Dashboard.command

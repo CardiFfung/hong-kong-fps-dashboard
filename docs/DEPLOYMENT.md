@@ -1,26 +1,34 @@
-# 公開 demo 部署準備
+# Deployment
 
-本地版已驗證；尚未建立公開網址。此 project 需要 Python 伺服器，採用原本指定嘅 Streamlit，唔將佢改成只能顯示靜態數字嘅網頁。
+The application runs as a Python service. GitHub hosts the source code; GitHub Pages does not run the Streamlit server.
 
-建議使用 Streamlit Community Cloud。已核對[官方部署文件](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy)及[依賴文件](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies)，核對日期 2026-09-17。
+## Streamlit Community Cloud
 
-## 已準備好
+Use the following configuration:
 
-- `app.py` 為啟動入口，`requirements.txt` 固定本地驗證版本。
-- `.streamlit/config.toml` 設定主題。
-- `data/current.json`、對應 raw 與 processed 快照可以一併提交，首次啟動唔依賴官方 API 即時可用。
-- 冇 API 金鑰需要公開；唔好提交 `.venv`、任何帳戶憑證或個人檔案。
-- `.github/workflows/tests.yml` 可喺 GitHub 重跑離線測試。
+| Setting | Value |
+|---|---|
+| Repository | `CardiFfung/hong-kong-fps-dashboard` |
+| Branch | `main` |
+| Entrypoint | `app.py` |
+| Python version | `3.13` |
+| Dependency file | `requirements.txt` |
+| Secrets | None required for the public HKMA APIs |
 
-## 最後發佈步驟（需要帳戶）
+Create an app in Streamlit Community Cloud, select the repository and entrypoint, and set the Python version in Advanced settings. The dashboard theme is defined in `.streamlit/config.toml`.
 
-1. 將 `fps-dashboard` 內容放到你選定 GitHub repository 根目錄；審閱 README、程式、快照同截圖。
-2. 登入 Streamlit Community Cloud，選 Create app，指定 repository、branch 同 `app.py`。
-3. Advanced settings 選 **Python 3.13**，與本地驗證主版本一致；唔需要設定 secrets。
-4. 發佈後打開公開網址，確認五張圖、下載、更新及錯誤狀態，再將網址加入 README／CV。
+See the official [deployment instructions](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy) and [dependency documentation](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/app-dependencies).
 
-雲端容器重啟可能清除執行期間寫入嘅快照，原始 repository 快照仍可用。正式长期更新應由擁有者定期執行 pipeline，審閱修訂再更新 repository，或另設持久儲存。呢版冇聲稱已具備生產級排程、監察或持久儲存。
+## Data Persistence
 
-GitHub 原始碼已公開：[hong-kong-fps-dashboard](https://github.com/CardiFfung/hong-kong-fps-dashboard)，main 分支嘅自動測試已通過。
+Commit `data/current.json` together with its corresponding raw and processed snapshot directories. The app reads the included snapshot on startup and contacts HKMA when a user requests an update.
 
-尚欠：Streamlit Community Cloud 登入同公開 app 發佈。現有 repository 選 `CardiFfung/hong-kong-fps-dashboard`，分支 `main`，入口 `app.py`。登入應由你喺瀏覽器完成，唔需要將密碼貼入對話。
+Runtime updates write new snapshots to the host filesystem. These files may not survive a cloud restart. For durable updates, refresh the repository snapshot or configure persistent storage. No scheduled refresh is configured.
+
+## Release Checks
+
+1. Confirm the displayed data month and retrieval time.
+2. Check the five charts and switch the date range, metric, and payment category.
+3. Download a CSV and compare its period and totals with the selected data.
+4. Run the test suite, including the simulated API-failure and missing-snapshot cases.
+5. Once the hosted app is reachable, add its verified URL near the top of the README.
