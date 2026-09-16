@@ -4,6 +4,10 @@
 
 Python · pandas · Streamlit · Plotly | HKD only | 96 months | 19 automated tests
 
+[![Validate FPS dashboard](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/workflows/tests.yml)
+
+[GitHub repository](https://github.com/CardiFfung/hong-kong-fps-dashboard)
+
 ![實際運行截圖：最新月份概覽及支付趨勢](docs/dashboard.png)
 
 > 本地成品已實際執行及驗證。公開 demo 尚待帳戶部署；不使用虛構 demo 網址。數據快照擷取於 2026-09-17T00:59:25.629892+08:00。
@@ -33,6 +37,13 @@ Python · pandas · Streamlit · Plotly | HKD only | 96 months | 19 automated te
 ## 安裝及啟動
 
 建議 **Python 3.13**（本機已使用 3.13.14 驗證）。先將 Terminal 切換到呢個 `fps-dashboard` 資料夾。
+
+下載新副本：
+
+```bash
+git clone https://github.com/CardiFfung/hong-kong-fps-dashboard.git
+cd hong-kong-fps-dashboard
+```
 
 ```bash
 python3 -m venv .venv
@@ -94,7 +105,7 @@ python -m pytest -q
 python -m src.pipeline --offline
 ```
 
-19 項測試通過：月份唯一、缺月處理、單位換算、零分母、推出月份排除、分母選擇、合計差異報告、分頁、API 失敗、快照保護及畫面篩選。另用 Decimal 手算核對最新官方數字，真實 Chromium 瀏覽器驗證五張圖、CSV 下載及手機畫面。詳見 [QA 報告](docs/QA_REPORT.md)。GitHub 工作流程已備妥，尚未喺遠端執行。
+19 項測試通過：月份唯一、缺月處理、單位換算、零分母、推出月份排除、分母選擇、合計差異報告、分頁、API 失敗、快照保護及畫面篩選。另用 Decimal 手算核對最新官方數字，真實 Chromium 瀏覽器驗證五張圖、CSV 下載及手機畫面。詳見 [QA 報告](docs/QA_REPORT.md)。GitHub Actions 已於 2026-09-17 喺 Ubuntu / Python 3.13 [通過驗證](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241)。
 
 ## 資料限制
 

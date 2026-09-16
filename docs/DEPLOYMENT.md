@@ -21,4 +21,6 @@
 
 雲端容器重啟可能清除執行期間寫入嘅快照，原始 repository 快照仍可用。正式长期更新應由擁有者定期執行 pipeline，審閱修訂再更新 repository，或另設持久儲存。呢版冇聲稱已具備生產級排程、監察或持久儲存。
 
-尚欠：你嘅 GitHub／Streamlit 登入同發佈目的地。登入應由你喺瀏覽器完成，唔需要將密碼貼入對話。
+GitHub 原始碼已公開：[hong-kong-fps-dashboard](https://github.com/CardiFfung/hong-kong-fps-dashboard)，main 分支嘅自動測試已通過。
+
+尚欠：Streamlit Community Cloud 登入同公開 app 發佈。現有 repository 選 `CardiFfung/hong-kong-fps-dashboard`，分支 `main`，入口 `app.py`。登入應由你喺瀏覽器完成，唔需要將密碼貼入對話。

@@ -60,6 +60,6 @@ python tests/browser_check.py
 
 ## 實際驗證範圍限制
 
-已驗證本機 macOS 及 Chromium；Windows、Safari、公開雲端部署未實測。GitHub CI 檔已備妥但未上傳執行。API 故障以受控模擬測試，唔代表能預測所有網絡錯誤；所有 refresh 例外會由畫面統一處理。
+已驗證本機 macOS 及 Chromium；Windows、Safari、公開 Streamlit 部署未實測。GitHub Actions 已喺 Ubuntu / Python 3.13 成功執行，見[雲端測試結果](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241)。API 故障以受控模擬測試，唔代表能預測所有網絡錯誤；所有 refresh 例外會由畫面統一處理。
 
 截圖：`dashboard.png`（概覽）、`dashboard-detail.png`（資料下載區）、`dashboard-mobile.png`（手機概覽）。
