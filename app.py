@@ -22,7 +22,7 @@ st.markdown('**Hong Kong FPS Trends Dashboard** · 用金管局月度統計，�
 with st.sidebar:
     st.header('資料與篩選')
     st.caption('啟動時讀取已驗證官方快照。按下面按鈕先會連線更新；呢個頁面並非即時交易監察。')
-    update = st.button('從 HKMA 更新資料', type='primary', use_container_width=True)
+    update = st.button('搜尋', type='primary', use_container_width=True)
 
 if update:
     try:
@@ -36,7 +36,7 @@ if update:
 try:
     data, meta = load_snapshot()
 except Exception as exc:
-    st.error('未有可用嘅已驗證資料。請按「從 HKMA 更新資料」，或先執行 python -m src.pipeline。')
+    st.error('未有可用嘅已驗證資料。請按「搜尋」，或先執行 python -m src.pipeline。')
     st.caption(f'讀取失敗：{type(exc).__name__}: {exc}')
     st.stop()
 
