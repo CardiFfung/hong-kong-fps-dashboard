@@ -1,0 +1,57 @@
+{
+  "snapshot": "20260917T011357028862+0800",
+  "retrieved_at": "2026-09-17T01:14:02.892229+08:00",
+  "sources": {
+    "volume": "https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-vol",
+    "value_hkd_thousand": "https://api.hkma.gov.hk/public/market-data-and-statistics/monthly-statistical-bulletin/banking/ch-statistics-turnover-fps-hkd-payment-val"
+  },
+  "raw_sha256": {
+    "volume": "eaa8edbfbf74fef434ce924a9e4188383173d4ad9114d3ec80c60a832a3684da",
+    "value_hkd_thousand": "26193d62fb2d6ec30a7c4f727a411301a4ce7fa964ba4b279c475f9db5b6f92c"
+  },
+  "report": {
+    "reconciliation_issues": [],
+    "volume": {
+      "rows": 96,
+      "start": "2018-09-01",
+      "end": "2026-08-01",
+      "missing_months": [],
+      "null_counts": {
+        "total": 0,
+        "rt_payment": 0,
+        "bat_payment": 0,
+        "rtctp": 0,
+        "rtddp": 0,
+        "rtctp_pp_payee_proxy_id": 0,
+        "rtctp_pp_payee_acc_no": 0,
+        "rtctp_other_payment": 0
+      },
+      "extra_fields": []
+    },
+    "value_hkd_thousand": {
+      "rows": 96,
+      "start": "2018-09-01",
+      "end": "2026-08-01",
+      "missing_months": [],
+      "null_counts": {
+        "total": 0,
+        "rt_payment": 0,
+        "bat_payment": 0,
+        "rtctp": 0,
+        "rtddp": 0,
+        "rtctp_pp_payee_proxy_id": 0,
+        "rtctp_pp_payee_acc_no": 0,
+        "rtctp_other_payment": 0
+      },
+      "extra_fields": []
+    },
+    "months_only_in_volume": [],
+    "months_only_in_value": [],
+    "warnings": []
+  },
+  "findings": [
+    "2026-08 總筆數為 82,587,554 筆，按月 -2.03%，按年 +14.93%。",
+    "同月總金額為 8,062.70 億港元，按年 +9.09%；平均每筆 9,762.61 港元。",
+    "即時支付佔總筆數 88.13%，佔總金額 69.21%；筆數與金額組成並不相同。"
+  ]
+}

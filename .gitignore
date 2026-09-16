@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.DS_Store
+*.log
+data/current.tmp
+data/current-*.tmp
