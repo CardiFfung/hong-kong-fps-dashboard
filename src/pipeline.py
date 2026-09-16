@@ -31,7 +31,7 @@ HK = ZoneInfo('Asia/Hong_Kong')
 
 
 class DataError(ValueError):
-    """Invalid source data; never substitute fabricated numbers."""
+    """Raised when source data fail validation."""
 
 
 def fetch_pages(url, pagesize=1000, session=None):

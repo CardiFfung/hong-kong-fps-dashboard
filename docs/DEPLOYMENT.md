@@ -33,4 +33,4 @@ Runtime updates write new snapshots to the host filesystem. These files may not 
 2. Check the five charts and switch the date range, metric, and payment category.
 3. Download a CSV and compare its period and totals with the selected data.
 4. Run the test suite, including the simulated API-failure and missing-snapshot cases.
-5. Once the hosted app is reachable, add its verified URL near the top of the README.
+5. Verify that the live URL in the README still resolves to the deployed app.
