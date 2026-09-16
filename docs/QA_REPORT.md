@@ -63,8 +63,12 @@ The browser script's expected row count and latest volume refer to the baseline 
 
 ## Verification Scope
 
-[GitHub Actions passed on Ubuntu with Python 3.13](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241). Browser verification was performed locally in Chromium. Windows, Safari, and the hosted Streamlit application have not been tested in this baseline.
+[GitHub Actions passed on Ubuntu with Python 3.13](https://github.com/CardiFfung/hong-kong-fps-dashboard/actions/runs/35129351241). Browser verification was performed locally in Chromium. Windows and Safari have not been tested in this baseline.
 
 API failure states are tested with controlled exceptions. Raw responses are preserved, and snapshot activation occurs only after retrieval and validation complete.
 
 Screenshots: `dashboard.png`, `dashboard-detail.png`, and `dashboard-mobile.png` in this directory.
+
+## Hosted Application Check
+
+On 17 September 2026, the [Streamlit deployment](https://hong-kong-fps-dashboard.streamlit.app/) was checked in the browser. All five charts loaded, with August 2026 headline metrics matching the saved snapshot. Switching to value and batch payments worked, the start-month filter changed to October 2018, and the filtered CSV button produced a download. This check used the included snapshot; a fresh HKMA API update was not requested during deployment verification.

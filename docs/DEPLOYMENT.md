@@ -1,5 +1,7 @@
 # Deployment
 
+Live application: [Hong Kong FPS Trends Dashboard](https://hong-kong-fps-dashboard.streamlit.app/). Deployed on 17 September 2026 using Python 3.13.
+
 The application runs as a Python service. GitHub hosts the source code; GitHub Pages does not run the Streamlit server.
 
 ## Streamlit Community Cloud

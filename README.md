@@ -2,6 +2,8 @@
 
 Explore monthly HKD payment activity in Hong Kong's Faster Payment System using official Hong Kong Monetary Authority (HKMA) data.
 
+**[Open the live dashboard](https://hong-kong-fps-dashboard.streamlit.app/)**
+
 ![Dashboard showing monthly payment trends and the latest metrics](docs/dashboard.png)
 
 ## Overview
